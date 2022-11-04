@@ -18,11 +18,16 @@
 
     <Label styleClass="title" fx:id="displayStudentCard" />
 
+    <Label styleClass="h1" text="Tickets" />
+
     <!-- Display previous tickets -->
-    <Label styleClass="h1" text="Previous tickets" />
     <Label fx:id="previousTicketsAmountLabel" />
     <ListView fx:id="previousTicketsList" />
 
     <!-- Create new ticket -->
+    <Button text="Create new ticket" onAction="#createNewTicket" />
+
+    <!-- Return to main screen -->
+    <Button text="Back" onAction="#returnToMainScreen" />
 
 </VBox>
