@@ -11,7 +11,7 @@ public class Database {
      * Connect to SQLite database.
      * @return the connection
      */
-    public static Connection connect() {
+    private static Connection connect() {
         Connection conn = null;
 
         try {
@@ -20,7 +20,6 @@ public class Database {
             conn = DriverManager.getConnection(connectionPath);
 
         } catch (SQLException exception) {
-            new Alert(Alert.AlertType.ERROR, exception.getMessage()).showAndWait();
             exception.printStackTrace();
         }
 
@@ -35,17 +34,17 @@ public class Database {
     public static void createTables() {
 
         String studentTableQuery =
-                "CREATE TABLE IF NOT EXISTS students (" +
-                "   id              INTEGER PRIMARY KEY," +
-                "   student_card    TEXT NOT NULL" +
+                "CREATE TABLE IF NOT EXISTS students ( " +
+                "   id              INTEGER PRIMARY KEY, " +
+                "   student_card    TEXT NOT NULL " +
                 ")";
 
         String ticketTableQuery =
-                "CREATE TABLE IF NOT EXISTS tickets (" +
-                "   id          INTEGER PRIMARY KEY" +
-                "   student_id  INTEGER NOT NULL" +
-                "   datetime    TEXT NOT NULL" +
-                "   FOREIGN KEY (student_id) REFERENCES students(id)" +
+                "CREATE TABLE IF NOT EXISTS tickets ( " +
+                "   id          INTEGER PRIMARY KEY, " +
+                "   student_id  INTEGER NOT NULL, " +
+                "   datetime    TEXT NOT NULL, " +
+                "   FOREIGN KEY (student_id) REFERENCES students(id) " +
                 ")";
 
         Connection conn = connect();
@@ -63,13 +62,15 @@ public class Database {
     }
 
     /**
-     * Inserts one student
+     * Inserts one student.
+     * Returns the primary key of the student.
      * @param studentCard student card number
      */
-    public static void insertStudent(String studentCard) {
+    public static int insertStudent(String studentCard) {
+        int studentID = 0;
 
         String insertStudentQuery =
-                "INSERT INTO students (student_card)" +
+                "INSERT INTO students (student_card) " +
                 "VALUES (?)";
 
         Connection conn = connect();
@@ -79,11 +80,14 @@ public class Database {
             pstmt.setString(1, studentCard);
             pstmt.executeUpdate();
 
+            studentID = pstmt.getGeneratedKeys().getInt(1);
+
             conn.close();
         } catch (SQLException exception) {
-            new Alert(Alert.AlertType.ERROR, exception.getMessage()).showAndWait();
             exception.printStackTrace();
         }
+
+        return studentID;
     }
 
     /**
@@ -92,9 +96,10 @@ public class Database {
      * @param studentCard student card number
      */
     public static int getStudentPrimaryKey(String studentCard) {
+        int primaryKey = 0;
 
         String selectStudentQuery =
-                "SELECT * FROM students" +
+                "SELECT * FROM students " +
                 "WHERE student_card = ?";
 
         Connection conn = connect();
@@ -104,18 +109,43 @@ public class Database {
             pstmt.setString(1, studentCard);
 
             ResultSet results = pstmt.executeQuery();
-            while (results.next()) {
-                int primaryKey = results.getInt("ID");
-                return primaryKey;
-            }
+            primaryKey = results.getInt("id");
 
             conn.close();
         } catch (SQLException exception) {
-            new Alert(Alert.AlertType.ERROR, exception.getMessage()).showAndWait();
             exception.printStackTrace();
         }
 
-        return 0;
+        return primaryKey;
+    }
+
+    /**
+     * Get student card of student.
+     * If student does not exist, return empty string.
+     * @param studentPrimaryKey student card number
+     */
+    public static String getStudentCard(int studentPrimaryKey) {
+        String studentCard = "";
+
+        String selectStudentQuery =
+                "SELECT * FROM students " +
+                "WHERE id = ?";
+
+        Connection conn = connect();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(selectStudentQuery);
+            pstmt.setInt(1, studentPrimaryKey);
+
+            ResultSet results = pstmt.executeQuery();
+            studentCard = results.getString("student_card");
+
+            conn.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return studentCard;
     }
 
     /**
@@ -126,7 +156,7 @@ public class Database {
     public static void createTicket(int studentPrimaryKey, String datetime) {
 
         String insertTicketQuery =
-                "INSERT INTO tickets (student_id, datetime)" +
+                "INSERT INTO tickets (student_id, datetime) " +
                 "VALUES (?, ?)";
 
         Connection conn = connect();
@@ -154,7 +184,7 @@ public class Database {
         ArrayList<String> tickets = new ArrayList<String>();
 
         String selectStudentTicketsQuery =
-                "SELECT * FROM tickets" +
+                "SELECT * FROM tickets " +
                 "WHERE student_id = ?";
 
         Connection conn = connect();
@@ -171,7 +201,6 @@ public class Database {
 
             conn.close();
         } catch (SQLException exception) {
-            new Alert(Alert.AlertType.ERROR, exception.getMessage()).showAndWait();
             exception.printStackTrace();
         }
 
@@ -185,7 +214,7 @@ public class Database {
     public static void deleteTicket(int ticketPrimaryKey) {
 
         String deleteTicketQuery =
-                "DELETE FROM tickets" +
+                "DELETE FROM tickets " +
                 "WHERE id = ?";
 
         Connection conn = connect();
@@ -197,7 +226,6 @@ public class Database {
 
             conn.close();
         } catch (SQLException exception) {
-            new Alert(Alert.AlertType.ERROR, exception.getMessage()).showAndWait();
             exception.printStackTrace();
         }
     }
