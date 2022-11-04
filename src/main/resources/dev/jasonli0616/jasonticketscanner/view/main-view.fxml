@@ -17,7 +17,10 @@
 
     <Label styleClass="title" text="JasonTicketScanner"/>
 
+    <!-- Student card submit -->
     <TextField fx:id="studentCardInput" />
-
     <Button text="Submit" defaultButton="true" onAction="#handleSubmitButton" />
+
+    <!-- Edit database button -->
+    <Button text="Edit database" onAction="#handleEditDatabaseButton" />
 </VBox>

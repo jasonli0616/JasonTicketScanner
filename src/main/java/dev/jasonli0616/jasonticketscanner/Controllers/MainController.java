@@ -5,6 +5,7 @@ import dev.jasonli0616.jasonticketscanner.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -38,6 +39,17 @@ public class MainController {
         stage.setScene(scene);
         StudentController controller = fxmlLoader.getController();
         controller.setStudent(studentID);
+    }
+
+    @FXML
+    protected void handleEditDatabaseButton() {
+        Alert dialog = new Alert(Alert.AlertType.INFORMATION,
+                "It is recommended to use https://sqlitebrowser.org/ to modify/view the database.\n" +
+                    "To clear the database, just delete the file.\n" +
+                    "The database is located at `" + Database.getDatabaseFilePath() + "`"
+        );
+        dialog.setWidth(600);
+        dialog.showAndWait();
     }
 
 }

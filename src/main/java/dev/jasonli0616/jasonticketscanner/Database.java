@@ -27,6 +27,14 @@ public class Database {
     }
 
     /**
+     * Return where the SQLite database is located.
+     * @return file path
+     */
+    public static String getDatabaseFilePath() {
+        return System.getProperty("user.home") + "/.jasonticketscanner.db";
+    }
+
+    /**
      * Creates:
      * students table
      * tickets table
