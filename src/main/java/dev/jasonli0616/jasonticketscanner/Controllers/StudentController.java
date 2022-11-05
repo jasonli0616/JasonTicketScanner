@@ -3,7 +3,6 @@ package dev.jasonli0616.jasonticketscanner.Controllers;
 import dev.jasonli0616.jasonticketscanner.Database;
 import dev.jasonli0616.jasonticketscanner.Main;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

@@ -1,7 +1,5 @@
 package dev.jasonli0616.jasonticketscanner;
 
-import javafx.scene.control.Alert;
-
 import java.sql.*;
 import java.util.ArrayList;
 
