@@ -25,7 +25,7 @@ public class StudentController {
     @FXML
     protected Label displayStudentCard;
 
-    @FXML protected ListView previousTicketsList;
+    @FXML protected ListView<String> previousTicketsList;
 
     @FXML protected Label previousTicketsAmountLabel;
 
