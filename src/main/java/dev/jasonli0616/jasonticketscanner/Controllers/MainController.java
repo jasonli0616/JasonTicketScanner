@@ -25,20 +25,24 @@ public class MainController {
     @FXML
     protected void handleSubmitButton() throws IOException {
         String studentCardValue = studentCardInput.getText();
-        int studentID = Database.getStudentPrimaryKey(studentCardValue);
+        if (! studentCardValue.isBlank()) {
+            int studentID = Database.getStudentPrimaryKey(studentCardValue);
 
-        // If student does not exist, create student
-        if (studentID == 0)
-            studentID = Database.insertStudent(studentCardValue);
+            // If student does not exist, create student
+            if (studentID == 0)
+                studentID = Database.insertStudent(studentCardValue);
 
-        // Go to student screen
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/student-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 400);
-        Stage stage = (Stage) studentCardInput.getScene().getWindow();
-        stage.setTitle("Student: " + studentCardValue);
-        stage.setScene(scene);
-        StudentController controller = fxmlLoader.getController();
-        controller.setStudent(studentID);
+            // Go to student screen
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/student-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 400, 400);
+            Stage stage = (Stage) studentCardInput.getScene().getWindow();
+            stage.setTitle("Student: " + studentCardValue);
+            stage.setScene(scene);
+            StudentController controller = fxmlLoader.getController();
+            controller.setStudent(studentID);
+        } else {
+            new Alert(Alert.AlertType.ERROR, "No student card value.").showAndWait();
+        }
     }
 
     @FXML
