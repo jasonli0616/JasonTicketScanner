@@ -2,7 +2,7 @@ module dev.jasonli0616.jasonticketscanner {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-
+    requires org.xerial.sqlitejdbc;
 
     opens dev.jasonli0616.jasonticketscanner to javafx.fxml;
     exports dev.jasonli0616.jasonticketscanner;
